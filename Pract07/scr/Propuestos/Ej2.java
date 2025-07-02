@@ -7,7 +7,10 @@ public class Ej2 {
         AVLTree<Integer> tree = new AVLTree<>();
         Scanner sc = new Scanner(System.in);
         int op;
-
+        System.out.println("nodos previamente insertados");
+        for (int val : values) {
+            tree.insert(val);
+        }
         do {
             System.out.println("\n===== MENU AVL =====");
             System.out.println("1. Insertar");
