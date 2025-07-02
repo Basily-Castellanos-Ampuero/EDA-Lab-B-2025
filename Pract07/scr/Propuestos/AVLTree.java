@@ -169,6 +169,84 @@ public class AVLTree<T extends Comparable<T>> {
             System.out.print(node.data + " ");
         }
     }
+    //METODOS DEL EJERCICIO 2
+
+    public boolean search(T key) {
+    return search(root, key);
+    }
+
+    private boolean search(Node<T> node, T key) {
+        if (node == null) return false;
+        if (key.compareTo(node.data) == 0) return true;
+        if (key.compareTo(node.data) < 0)
+            return search(node.left, key);
+        else
+            return search(node.right, key);
+    }
+
+    public T min() {
+        if (root == null) return null;
+        Node<T> current = root;
+        while (current.left != null)
+            current = current.left;
+        return current.data;
+    }
+
+    public T max() {
+        if (root == null) return null;
+        Node<T> current = root;
+        while (current.right != null)
+            current = current.right;
+        return current.data;
+    }
+    public T predecesor(T key) {
+        Node<T> current = root;
+        Node<T> pred = null;
+        while (current != null) {
+            if (key.compareTo(current.data) > 0) {
+                pred = current;
+                current = current.right;
+            } else {
+                current = current.left;
+            }
+        }
+        return (pred != null) ? pred.data : null;
+    }
+
+    public T sucesor(T key) {
+        Node<T> current = root;
+        Node<T> succ = null;
+
+        while (current != null) {
+            if (key.compareTo(current.data) < 0) {
+                succ = current;
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        return (succ != null) ? succ.data : null;
+    }
+
+    public Node<T> balancearIzquierda(Node<T> node) {
+        System.out.println("Balanceo a la izquierda llamado manualmente en: " + node.data);
+        return rotateLeft(node);
+    }
+
+    public Node<T> balancearDerecha(Node<T> node) {
+        System.out.println("Balanceo a la derecha llamado manualmente en: " + node.data);
+        return rotateRight(node);
+    }
+
+    public Node<T> rotacionSimpleIzquierda(Node<T> node) {
+        System.out.println("Rotación simple izquierda en: " + node.data);
+        return rotateLeft(node);
+    }
+
+    public Node<T> rotacionSimpleDerecha(Node<T> node) {
+        System.out.println("Rotación simple derecha en: " + node.data);
+        return rotateRight(node);
+    }
 
    
 }
