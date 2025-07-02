@@ -1,4 +1,6 @@
 package Propuestos;
+import org.graphstream.graph.*;
+import org.graphstream.graph.implementations.*;
 
 public class AVLTree<T extends Comparable<T>> {
     private Node<T> root;
@@ -248,5 +250,44 @@ public class AVLTree<T extends Comparable<T>> {
         return rotateRight(node);
     }
 
+     //METODOS DEL EJERCICIO 3
+    
+    public void visualizarAVL() {
+        System.setProperty("org.graphstream.ui", "swing");
+        Graph graph = new SingleGraph("Árbol AVL");
+
+        if (root == null) {
+            System.out.println("El árbol está vacío.");
+            return;
+        }
+
+        graph.setStrict(false);
+        graph.setAutoCreate(true);
+
+        // Estilo visual
+        graph.setAttribute("ui.stylesheet", 
+            "node { fill-color: lightblue; size: 25px, 25px; text-size: 14px; text-alignment: center; }" +
+            "edge { fill-color: gray; }");
+
+        agregarNodosYAristas(graph, root, null, "");
+
+        graph.display();
+    }
+
+    private void agregarNodosYAristas(Graph graph, Node<T> actual, Node<T> padre, String lado) {
+        if (actual == null) return;
+
+        String idActual = actual.data.toString();
+        graph.addNode(idActual).setAttribute("ui.label", idActual);
+
+        if (padre != null) {
+            String idPadre = padre.data.toString();
+            String edgeId = idPadre + "-" + idActual + "-" + lado;
+            graph.addEdge(edgeId, idPadre, idActual, true); // directed
+        }
+
+        agregarNodosYAristas(graph, actual.left, actual, "L");
+        agregarNodosYAristas(graph, actual.right, actual, "R");
+    }
    
 }
