@@ -108,7 +108,43 @@ public class BTree<E extends Comparable<E>> {
         }
         return s;
     }
+    //METODOS EXTRAS
+    public boolean search(E key) {
+        return searchRecursive(root, key);
+    }
 
+    private boolean searchRecursive(BNode<E> node, E key) {
+        if (node == null) return false;
+
+        int i = 0;
+        while (i < node.count && key.compareTo(node.keys.get(i)) > 0)
+            i++;
+
+        if (i < node.count && key.equals(node.keys.get(i)))
+            return true;
+        else
+            return searchRecursive(node.childs.get(i), key);
+    }
+
+    public E min() {
+        BNode<E> current = root;
+        if (current == null) return null;
+        
+        while (current.childs.get(0) != null) {
+            current = current.childs.get(0);
+        }
+        return current.keys.get(0);
+    }
+    
+    public E max() {
+        BNode<E> current = root;
+        if (current == null) return null;
+    
+        while (current.childs.get(current.count) != null) {
+            current = current.childs.get(current.count);
+        }
+        return current.keys.get(current.count - 1);
+    }
 
 
 }
