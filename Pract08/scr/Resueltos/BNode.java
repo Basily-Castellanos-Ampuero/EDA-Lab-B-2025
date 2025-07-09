@@ -1,5 +1,4 @@
 package Laboratorio.Pract08.scr.Resueltos;
-//Lógica del arbol B en el directorio "Resueltos"
 
 import java.util.ArrayList;
 
@@ -26,8 +25,8 @@ public class BNode<E> {
         return this.count == 0;
     }
 
-    // Devuelve true si la clave se encuentra, y posición en pos[0]; 
-    // si no se encuentra, devuelve false y pos[0] indica dónde debe bajar.
+    // Devuelve true si la clave se encuentra, y posicion en pos0; 
+    // si no se encuentra devuelve false y pos[0] indica dónde debe bajar.
     public boolean searchNode(E key, int[] pos) {
         int i = 0;
         while (i < count && key.toString().compareTo(keys.get(i).toString()) > 0)
