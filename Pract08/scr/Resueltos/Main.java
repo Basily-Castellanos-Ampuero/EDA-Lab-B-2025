@@ -2,7 +2,7 @@ package Laboratorio.Pract08.scr.Resueltos;
 
 public class Main {
     public static void main(String[] args) {
-        BTree<Integer> btree = new BTree<>(4); // Árbol B de orden 5
+        BTree<Integer> btree = new BTree<>(4); 
 
         int[] valores = {100, 200, 300, 400, 500};
 
@@ -13,6 +13,6 @@ public class Main {
             System.out.println(btree);
         }
 
-        // (Para una versión completa, se puede implementar y llamar a remove())
+        // Prueba simple del funcionamiento
     }
 }
