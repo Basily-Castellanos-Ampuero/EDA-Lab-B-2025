@@ -1,5 +1,8 @@
 package Laboratorio.Pract08.scr.Propuestos;
 
+import org.graphstream.graph.*;
+import org.graphstream.graph.implementations.*;
+
 public class BTree<E extends Comparable<E>> {
     private BNode<E> root;
     private int order;
@@ -222,7 +225,7 @@ public class BTree<E extends Comparable<E>> {
             parent.childs.set(parent.count, null);
             parent.count--;
         }
-        // Fusión con hermano derecho
+        // Fusion con hermano derecho
         else {
             BNode<E> right = parent.childs.get(idx + 1);
             child.keys.set(child.count, parent.keys.get(idx));
@@ -241,6 +244,116 @@ public class BTree<E extends Comparable<E>> {
             parent.childs.set(parent.count, null);
             parent.count--;
         }
+    }
+
+    //METODOS EXTRAS 
+    public boolean search(E x) {
+        return searchRec(root, x);
+    }
+
+    private boolean searchRec(BNode<E> node, E x) {
+        if (node == null) return false;
+        int[] pos = new int[1];
+        if (node.searchNode(x, pos)) return true;
+        return searchRec(node.childs.get(pos[0]), x);
+    }
+
+    public void destroy() {
+        root = null;
+    }
+    public E min() {
+        if (isEmpty()) return null;
+        BNode<E> current = root;
+        while (current.childs.get(0) != null) {
+            current = current.childs.get(0);
+        }
+        return current.keys.get(0);
+    }
+    public E max() {
+        if (isEmpty()) return null;
+        BNode<E> current = root;
+        while (current.childs.get(current.count) != null) {
+            current = current.childs.get(current.count);
+        }
+        return current.keys.get(current.count - 1);
+    }
+    public E predecesor(E x) {
+        BNode<E> node = root;
+        E pred = null;
+        while (node != null) {
+            int[] pos = new int[1];
+            boolean found = node.searchNode(x, pos);
+            if (found) {
+                if (node.childs.get(pos[0]) != null) {
+                    node = node.childs.get(pos[0]);
+                    while (node.childs.get(node.count) != null)
+                        node = node.childs.get(node.count);
+                    return node.keys.get(node.count - 1);
+                }
+                return pred;
+            } else {
+                if (pos[0] > 0) pred = node.keys.get(pos[0] - 1);
+                node = node.childs.get(pos[0]);
+            }
+        }
+        return pred;
+    }
+    public E sucesor(E x) {
+        BNode<E> node = root;
+        E succ = null;
+        while (node != null) {
+            int[] pos = new int[1];
+            boolean found = node.searchNode(x, pos);
+            if (found) {
+                if (node.childs.get(pos[0] + 1) != null) {
+                    node = node.childs.get(pos[0] + 1);
+                    while (node.childs.get(0) != null)
+                        node = node.childs.get(0);
+                    return node.keys.get(0);
+                }
+                return succ;
+            } else {
+                if (pos[0] < node.count) succ = node.keys.get(pos[0]);
+                node = node.childs.get(pos[0]);
+            }
+        }
+        return succ;
+    }
+
+    //PARTE GRAFICA 
+    public void visualizar() {
+       if (root == null) {
+           System.out.println("Arbol vacio");
+           return;
+       }
+
+       Graph graph = new SingleGraph("Arbol B");
+       graph.setStrict(false);
+       graph.setAutoCreate(true);
+       System.setProperty("org.graphstream.ui", "swing");
+
+       // Estilo
+       graph.setAttribute("ui.stylesheet", 
+           "node { fill-color:rgb(71, 171, 199); text-size: 14px; shape: box; }" +
+           "edge { fill-color: gray; }");
+
+       graficarNodo(graph, root, "R");
+
+       graph.display();
+    }
+
+    private void graficarNodo(Graph graph, BNode<E> nodo, String id) {
+       String label = nodo.keys.subList(0, nodo.count).toString();
+       graph.addNode(id).setAttribute("ui.label", label);
+
+       for (int i = 0; i <= nodo.count; i++) {
+           BNode<E> hijo = nodo.childs.get(i);
+           if (hijo != null) {
+               String childId = id + "_" + i;
+               graficarNodo(graph, hijo, childId);
+               graph.addEdge(id + "-" + childId, id, childId, true); // directed=false opcional
+           }
+       }
     }
 
 }
