@@ -12,24 +12,43 @@ public class HashClosed<E> {
         return key % table.length;
     }
 
+    //mejorado
     public void insert(Register<E> reg) {
-        int key = reg.getKey();
-        int index = hash(key);
+    int key = reg.getKey();
+    int index = hash(key);
+    boolean colision = false;
 
-        for (int i = 0; i < table.length; i++) {
-            int probeIndex = (index + i) % table.length;
-            if (table[probeIndex] == null || !occupied[probeIndex]) {
-                table[probeIndex] = reg;
-                occupied[probeIndex] = true;
-                System.out.println("Insertado: " + reg);
-                return;
-            } else if (table[probeIndex].getKey() == key) {
-                System.out.println("ERROR: Clave duplicada " + key);
-                return;
+    System.out.println("Intentando insertar clave " + key + " (valor: " + reg.getValue() + ")");
+    for (int i = 0; i < table.length; i++) {
+        int probe = (index + i) % table.length;
+
+        if (table[probe] != null && table[probe].getKey() == key && occupied[probe]) {
+            System.out.println("Clave duplicada: " + key + " en posicion " + probe);
+            return;
+        }
+
+        if (!occupied[probe]) {
+            if (colision) {
+                System.out.println("Insertado en posicion " + probe + " luego de resolver colision");
+            } else {
+                System.out.println("Insertado en posicion " + probe);
+            }
+            table[probe] = reg;
+            occupied[probe] = true;
+            return;
+        } else {
+            if (!colision) {
+                System.out.println("Colision en posicion " + probe + ", buscando siguiente...");
+                colision = true;
+            } else {
+                System.out.println("Probing en posicion " + probe + "...");
             }
         }
-        System.out.println("ERROR: Tabla llena. No se pudo insertar " + reg);
     }
+
+    System.out.println("Tabla llena. No se pudo insertar: " + reg);
+}
+
 
     public Register<E> search(int key) {
         int index = hash(key);

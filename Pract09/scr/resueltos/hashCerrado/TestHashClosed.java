@@ -8,6 +8,7 @@ public class TestHashClosed {
             tabla.insert(new Register<>(clave, "Valor" + clave));
         }
 
+        // Mostrar tabla
         tabla.showTable();
 
         // Buscar elementos

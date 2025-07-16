@@ -1,4 +1,4 @@
-class Register<E> implements Comparable<Register<E>> {
+public class Register<E> implements Comparable<Register<E>> {
     private int key;
     private E value;
 
@@ -28,5 +28,4 @@ class Register<E> implements Comparable<Register<E>> {
     public String toString() {
         return key + ": " + value;
     }
-
 }
